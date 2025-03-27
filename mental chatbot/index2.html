@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mental Health Chatbot</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background-color: #5c6bc0;
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .header p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        .container {
+            max-width: 1000px;
+            width: 90%;
+            margin: 2rem auto;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .chat-container {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+        
+        .chat-header {
+            background-color: #7986cb;
+            color: white;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .avatar {
+            width: 40px;
+            height: 40px;
+            background-color: #5c6bc0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            font-weight: bold;
+        }
+        
+        .chat-header h2 {
+            font-size: 1.2rem;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            max-height: 500px;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .message {
+            display: flex;
+            margin-bottom: 1rem;
+            max-width: 80%;
+        }
+        
+        .message.user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+        
+        .message.bot {
+            align-self: flex-start;
+        }
+        
+        .message-bubble {
+            padding: 0.8rem 1.2rem;
+            border-radius: 1.2rem;
+            position: relative;
+            white-space: pre-wrap;
+        }
+        
+        .user .message-bubble {
+            background-color: #5c6bc0;
+            color: white;
+            border-bottom-right-radius: 0;
+            margin-left: 0.5rem;
+        }
+        
+        .bot .message-bubble {
+            background-color: #f1f3f6;
+            color: #333;
+            border-bottom-left-radius: 0;
+            margin-right: 0.5rem;
+        }
+        
+        .message-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        
+        .user .message-avatar {
+            background-color: #9fa8da;
+            color: white;
+        }
+        
+        .bot .message-avatar {
+            background-color: #7986cb;
+            color: white;
+        }
+        
+        .chat-input {
+            display: flex;
+            padding: 1rem;
+            background-color: #f8f9fb;
+            border-top: 1px solid #ebedf0;
+        }
+        
+        .chat-input input {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 24px;
+            outline: none;
+            font-size: 1rem;
+        }
+        
+        .chat-input input:focus {
+            border-color: #5c6bc0;
+            box-shadow: 0 0 0 2px rgba(92, 107, 192, 0.2);
+        }
+        
+        .chat-input button {
+            background-color: #5c6bc0;
+            color: white;
+            border: none;
+            border-radius: 24px;
+            padding: 0.8rem 1.5rem;
+            margin-left: 0.8rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+        
+        .chat-input button:hover {
+            background-color: #4a59b9;
+        }
+        
+        .chat-input button:active {
+            background-color: #3949ab;
+        }
+        
+        .typing-indicator {
+            display: flex;
+            padding: 0.5rem 1rem;
+            align-self: flex-start;
+            margin-bottom: 1rem;
+            max-width: 80%;
+        }
+        
+        .typing-indicator .dots {
+            display: flex;
+            align-items: center;
+        }
+        
+        .typing-indicator .dot {
+            width: 8px;
+            height: 8px;
+            background-color: #9fa8da;
+            border-radius: 50%;
+            margin-right: 3px;
+            animation: typing 1.5s infinite ease-in-out;
+        }
+        
+        .typing-indicator .dot:nth-child(1) {
+            animation-delay: 0s;
+        }
+        
+        .typing-indicator .dot:nth-child(2) {
+            animation-delay: 0.3s;
+        }
+        
+        .typing-indicator .dot:nth-child(3) {
+            animation-delay: 0.6s;
+            margin-right: 0;
+        }
+        
+        @keyframes typing {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+        
+        .welcome-message {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #555;
+        }
+        
+        .welcome-message h2 {
+            margin-bottom: 0.5rem;
+            color: #5c6bc0;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 1.5rem;
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: auto;
+        }
+        
+        /* Connection status indicator */
+        .connection-status {
+            text-align: center;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        
+        .status-connected {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .status-disconnected {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                margin: 1rem auto;
+            }
+            
+            .message {
+                max-width: 90%;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .chat-input {
+                padding: 0.8rem;
+            }
+            
+            .chat-input button {
+                padding: 0.8rem 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>Mental Health Companion</h1>
+        <p>A safe space to talk about your feelings and get support</p>
+    </header>
+    
+    <div class="container">
+        <div class="welcome-message">
+            <h2>Welcome!</h2>
+            <p>Share your thoughts, feelings, or questions with our mental health companion.</p>
+        </div>
+        
+        <div id="connectionStatus" class="connection-status status-connected">
+            Connected to API
+        </div>
+        
+        <div class="chat-container">
+            <div class="chat-header">
+                <div class="avatar">MH</div>
+                <h2>Mental Health Assistant</h2>
+            </div>
+            
+            <div class="chat-messages" id="chatMessages">
+                <!-- Messages will be displayed here -->
+                <div class="message bot">
+                    <div class="message-avatar">MH</div>
+                    <div class="message-bubble">Hello! I'm here to support you with your mental health questions and concerns. How are you feeling today?</div>
+                </div>
+            </div>
+            
+            <div class="chat-input">
+                <input type="text" id="userInput" placeholder="Type your message here..." autocomplete="off">
+                <button id="sendButton">Send</button>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <p>Disclaimer: This chatbot is not a substitute for professional mental health services. If you're in crisis, please call a mental health helpline or seek immediate professional help.</p>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatMessages = document.getElementById('chatMessages');
+            const userInput = document.getElementById('userInput');
+            const sendButton = document.getElementById('sendButton');
+            const connectionStatus = document.getElementById('connectionStatus');
+            
+            // API endpoint (update if deployed to a different URL)
+            const API_ENDPOINT = 'http://127.0.0.1:5000/chat';
+            
+            // Check connection to API
+            checkAPIConnection();
+            
+            // Function to check API connection
+            async function checkAPIConnection() {
+                try {
+                    // Try to ping the API
+                    const response = await fetch(API_ENDPOINT, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ query: "hello" })
+                    });
+                    
+                    if (response.ok) {
+                        connectionStatus.className = 'connection-status status-connected';
+                        connectionStatus.textContent = 'Connected to API';
+                    } else {
+                        throw new Error('API request failed');
+                    }
+                } catch (error) {
+                    connectionStatus.className = 'connection-status status-disconnected';
+                    connectionStatus.textContent = 'API Connection Failed - Check if Flask server is running';
+                    console.error('API connection error:', error);
+                }
+            }
+            
+            // Function to add a message to the chat
+            function addMessage(message, sender) {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('message', sender);
+                
+                const avatar = document.createElement('div');
+                avatar.classList.add('message-avatar');
+                avatar.textContent = sender === 'user' ? 'You' : 'MH';
+                
+                const bubble = document.createElement('div');
+                bubble.classList.add('message-bubble');
+                bubble.textContent = message;
+                
+                messageDiv.appendChild(avatar);
+                messageDiv.appendChild(bubble);
+                
+                chatMessages.appendChild(messageDiv);
+                
+                // Scroll to the bottom of the chat
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            // Function to display typing indicator
+            function showTypingIndicator() {
+                const indicator = document.createElement('div');
+                indicator.classList.add('typing-indicator');
+                indicator.id = 'typingIndicator';
+                
+                const avatar = document.createElement('div');
+                avatar.classList.add('message-avatar');
+                avatar.textContent = 'MH';
+                
+                const dots = document.createElement('div');
+                dots.classList.add('message-bubble');
+                
+                const dotsInner = document.createElement('div');
+                dotsInner.classList.add('dots');
+                
+                for (let i = 0; i < 3; i++) {
+                    const dot = document.createElement('div');
+                    dot.classList.add('dot');
+                    dotsInner.appendChild(dot);
+                }
+                
+                dots.appendChild(dotsInner);
+                indicator.appendChild(avatar);
+                indicator.appendChild(dots);
+                
+                chatMessages.appendChild(indicator);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            // Function to remove typing indicator
+            function removeTypingIndicator() {
+                const indicator = document.getElementById('typingIndicator');
+                if (indicator) {
+                    indicator.remove();
+                }
+            }
+            
+            // Function to send message to the API and get response
+            async function sendToAPI(message) {
+                try {
+                    const response = await fetch(API_ENDPOINT, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ query: message })
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error('API request failed');
+                    }
+                    
+                    const data = await response.json();
+                    return data.response || "I'm sorry, I couldn't process your request at this time.";
+                } catch (error) {
+                    console.error('Error calling API:', error);
+                    connectionStatus.className = 'connection-status status-disconnected';
+                    connectionStatus.textContent = 'API Connection Failed - Check if Flask server is running';
+                    return "I'm having trouble connecting to the server. Please make sure the Flask API is running at " + API_ENDPOINT;
+                }
+            }
+            
+            // Function to handle sending a message
+            async function sendMessage() {
+                const message = userInput.value.trim();
+                
+                if (message === '') {
+                    return;
+                }
+                
+                // Clear input field
+                userInput.value = '';
+                
+                // Add user message to chat
+                addMessage(message, 'user');
+                
+                // Show typing indicator
+                showTypingIndicator();
+                
+                try {
+                    // Get response from API (with a small delay to simulate thinking)
+                    setTimeout(async () => {
+                        const response = await sendToAPI(message);
+                        
+                        // Remove typing indicator
+                        removeTypingIndicator();
+                        
+                        // Add bot response to chat
+                        addMessage(response, 'bot');
+                        
+                        // Update connection status to connected
+                        connectionStatus.className = 'connection-status status-connected';
+                        connectionStatus.textContent = 'Connected to API';
+                    }, 1000);
+                } catch (error) {
+                    console.error('Error:', error);
+                    removeTypingIndicator();
+                    addMessage("I'm sorry, I encountered an error. Please try again later.", 'bot');
+                }
+            }
+            
+            // Event listeners
+            sendButton.addEventListener('click', sendMessage);
+            
+            userInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+            
+            // Focus input field when page loads
+            userInput.focus();
+        });
+    </script>
+</body>
+</html>

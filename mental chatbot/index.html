@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mental Health Chatbot</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-icon">
+            <i class="fas fa-brain"></i>
+        </div>
+        <h1>Mental Health Companion</h1>
+        <p>A safe space to talk about your feelings and get personalized support</p>
+    </header>
+    
+    <div class="container">
+        <div class="welcome-message">
+            <h2>Welcome to Your Mental Health Companion</h2>
+            <div class="welcome-illus">
+                <img src="assets/mental.jpeg" alt="Mental health illustration">
+            </div>
+            <p>Share your thoughts, feelings, or questions in a safe, confidential environment. Our mental health companion is here to listen, provide guidance, and support your wellbeing journey.</p>
+            
+            <div class="mood-selector">
+                <div class="mood-option" data-mood="happy">
+                    <div class="mood-emoji">😊</div>
+                    <div class="mood-label">Happy</div>
+                </div>
+                <div class="mood-option" data-mood="calm">
+                    <div class="mood-emoji">😌</div>
+                    <div class="mood-label">Calm</div>
+                </div>
+                <div class="mood-option" data-mood="sad">
+                    <div class="mood-emoji">😔</div>
+                    <div class="mood-label">Sad</div>
+                </div>
+                <div class="mood-option" data-mood="anxious">
+                    <div class="mood-emoji">😰</div>
+                    <div class="mood-label">Anxious</div>
+                </div>
+                <div class="mood-option" data-mood="angry">
+                    <div class="mood-emoji">😠</div>
+                    <div class="mood-label">Angry</div>
+                </div>
+                <div class="mood-option" data-mood="tired">
+                    <div class="mood-emoji">😴</div>
+                    <div class="mood-label">Tired</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <h3>Supportive Conversations</h3>
+                <p>Have meaningful conversations about your feelings, thoughts, and challenges in a judgment-free space.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-lightbulb"></i>
+                </div>
+                <h3>Coping Strategies</h3>
+                <p>Discover effective techniques to manage stress, anxiety, and other emotional challenges.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-hand-holding-heart"></i>
+                </div>
+                <h3>24/7 Support</h3>
+                <p>Access emotional support whenever you need it, day or night, no appointment necessary.</p>
+            </div>
+        </div>
+        
+        <div id="connectionStatus" class="connection-status status-connected">
+            <i class="fas fa-circle"></i> Connected to API
+        </div>
+        
+        <div class="chat-container">
+            <div class="chat-header">
+                <div class="avatar">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <div>
+                    <h2>Mental Health Assistant</h2>
+                    <div class="chat-header-status">Online • Ready to chat</div>
+                </div>
+            </div>
+            
+            <div class="chat-messages" id="chatMessages">
+                <!-- Messages will be displayed here -->
+                <div class="message bot">
+                    <div class="message-avatar"><i class="fas fa-heart"></i></div>
+                    <div>
+                        <div class="message-bubble">Hello! I'm your mental health companion. I'm here to listen and support you with your mental health questions and concerns. How are you feeling today?</div>
+                        <div class="message-time">Now</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chat-input">
+                <input type="text" id="userInput" placeholder="Type your message here..." autocomplete="off">
+                <button id="sendButton">Send <i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <p>Disclaimer: This chatbot is not a substitute for professional mental health services. If you're in crisis, please call a mental health helpline or seek immediate professional help.</p>
+        <div class="footer-links">
+            <a href="#">About</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Contact</a>
+        </div>
+    </footer>
+    <script src="app.js"></script>
+</body>
+</html>
